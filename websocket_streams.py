@@ -1,4 +1,4 @@
-from utils.websocket_utils import websocket_utils
+from bybit_python.utils.websocket_utils import websocket_utils
 
 class websocket_streams:
     def __init__(self, url, market):

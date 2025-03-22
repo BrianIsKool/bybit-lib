@@ -46,7 +46,7 @@ class websocket_utils:
                 "op": "subscribe",
                 "args": self.topics
             }
-            # Отправляем сообщение на сервер WebSocket
+
             await websocket.send(json.dumps(subscribe_message))
             print(f"subscribed channels: {self.topics}")
             while True:
@@ -54,16 +54,14 @@ class websocket_utils:
                 
                 if is_hidden == True:
                     if isinstance(response, str):
-                        # Если это строка — просто печатаем
-                        print("Received (string):", response)
+                        pass
+                        # print("Received (string):", response)
                     elif isinstance(response, bytes):
                         # Если это байты — разжимаем gzip
                         decompressed_data = gzip.decompress(response)
                         decoded_text = decompressed_data.decode("utf-8")
                         json_data = json.loads(decoded_text)
-
-                        # print(json.dumps(json_data, indent=4, ensure_ascii=False))
-                        await queue.put(json.dumps(json_data, indent=4, ensure_ascii=False))
+                        await queue.put(json_data)
                     
                 else:
                     await queue.put(json.loads(response))
