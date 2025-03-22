@@ -20,6 +20,6 @@ usage:.
 4. now you can get info from all sockets in asyncio.Queue, which you set as an argument in first paragraph.
 code example: ``` ```
 
-P.S
+P.S n\
 Sorry for the shitty code, I was making the library handy for myself. 
 
