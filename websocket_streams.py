@@ -41,8 +41,20 @@ class websocket_streams:
             interval (str): 1s 
             symbol (str): f.ex BTCUSDT 
         """
-        topic = f"kline_{interval}.{symbol}"
+        topic = f"kline_{interval}.{symbol}:"
         self.utils.hidden_topics.append(topic)
+        
+    async def merged_depth(self, symbol, limit, dumpScale):
+        """_summary_
+
+        Args:
+            symbol (str): symbol
+            limit (int): < 10 >= 40
+            dumpScale (int): 1, -1, -2, -3. by btc 0.1, 10, 100, 1000
+        """
+        topic = f"mergedDepth_{limit}.{symbol}:dumpScale={dumpScale}" #mergedDepth_40.BTCUSDT:dumpScale=1
+        self.utils.hidden_topics.append(topic)
+        pass
     
     async def sub_ticker(self, symbol, topic=""):
         pass

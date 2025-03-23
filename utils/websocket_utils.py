@@ -27,12 +27,11 @@ class websocket_utils:
             await asyncio.sleep(interval)
 
         
-    async def subscribe(self, queue, is_hidden=False):
+    async def subscribe(self, queue, is_hidden=False, subscribe_message=''):
         """_summary_
 
         Args:
             queue (_type_): _description_
-            url (type): touch this if you know what you are doing! defaut url "wss://stream.bybit.com/v5/public/spot"
         """
         if is_hidden == True:
             self.URL = self.HIDDEN_URL
@@ -41,7 +40,21 @@ class websocket_utils:
         async with websockets.connect(self.URL) as websocket:
             if is_hidden == True:
                 ping_task = asyncio.create_task(self.ws_ping(interval=15, websocket=websocket))
-                subscribe_message = {"topic":self.topics[0].split('.')[0],"params":{"binary":False,"limit":1},"symbol":self.topics[0].split('.')[-1],"event":"sub"}
+                # extra_params = {self.topics[0].split(':')[1].split['='][0]: self.topics[0].split(':')[1].split['='][1]}
+                # subscribe_message = {"topic":self.topics[0].split('.')[0],
+                                    #  "symbol":self.topics[0].split('.')[-1],
+                                    #  "limit": 0 if ,
+                                    #  "params":{"binary":False,"limit":1, extra_params[0]:extra_params[1]},
+                                    #  "event":"sub"}
+                if "mergedDepth" in self.topics[0]:
+                    subscribe_message = {"topic":self.topics[0].split('.')[0].split("_")[0], #mergedDepth_40.BTCUSDT:dumpScale=1
+                                        "symbol":self.topics[0].split('.')[-1].split(':')[0],
+                                        
+                                        "params":{"binary":False, "dumpScale": self.topics[0].split(':')[1].split('=')[1], "limit": int(self.topics[0].split('.')[0].split("_")[1]),},
+                                        "event":"sub"}
+                elif "kline" in self.topics[0]:
+                    subscribe_message = {"topic":self.topics[0].split('.')[0],"params":{"binary":False,"limit":1},"symbol":self.topics[0].split('.')[-1],"event":"sub"}
+                    
             else:
                 subscribe_message = {
                     "op": "subscribe",
