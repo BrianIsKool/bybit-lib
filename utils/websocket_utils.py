@@ -55,7 +55,7 @@ class websocket_utils:
                 
                 if is_hidden == True:
                     if isinstance(response, str):
-                        await queue.put(response)
+                        await queue.put(json.loads(response))
                         # print("Received (string):", response)
                     elif isinstance(response, bytes):
                         # Если это байты — разжимаем gzip
