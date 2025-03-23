@@ -9,7 +9,7 @@ class websocket_utils:
         self.topics = []
         self.hidden_topics = []
         self.URL="wss://stream.bybit.com/v5/public/spot"
-        self.HIDDEN_URL=f"wss://ws2.bycbe.com/realtime_w?timestamp={time.time()}"
+        self.HIDDEN_URL=f"wss://ws2.bybit.com/spot/ws/quote/v2?_platform=2&timestamp={time.time()}"
         
     async def ws_send(self, message, websocket):
         """
@@ -41,11 +41,12 @@ class websocket_utils:
         async with websockets.connect(self.URL) as websocket:
             if is_hidden == True:
                 ping_task = asyncio.create_task(self.ws_ping(interval=15, websocket=websocket))
-
-            subscribe_message = {
-                "op": "subscribe",
-                "args": self.topics
-            }
+                subscribe_message = {"topic":self.topics[0].split('.')[0],"params":{"binary":False,"limit":1},"symbol":self.topics[0].split('.')[-1],"event":"sub"}
+            else:
+                subscribe_message = {
+                    "op": "subscribe",
+                    "args": self.topics
+                }
 
             await websocket.send(json.dumps(subscribe_message))
             print(f"subscribed channels: {self.topics}")
@@ -54,7 +55,7 @@ class websocket_utils:
                 
                 if is_hidden == True:
                     if isinstance(response, str):
-                        pass
+                        await queue.put(response)
                         # print("Received (string):", response)
                     elif isinstance(response, bytes):
                         # Если это байты — разжимаем gzip

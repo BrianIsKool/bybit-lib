@@ -36,45 +36,12 @@ class websocket_streams:
         """_summary_
         WARNING: This is a hidden func of API. that Use not defaut api URL: f"wss://ws2.bycbe.com/realtime_w?timestamp={time.time()}"
         return something like:
-                    {
-                        "topic": "candle.1s.BTCUSDT",
-                        "data": [
-                            {
-                                "start": 1742677106,
-                                "end": 1742677107,
-                                "period": "1s",
-                                "open": 83912.1,
-                                "close": 83923.3,
-                                "high": 83923.3,
-                                "low": 83912.1,
-                                "volume": "1.874",
-                                "turnover": "157268.7425",
-                                "confirm": true,
-                                "cross_seq": 357864512873,
-                                "timestamp": 1742677107560099
-                            },
-                            {
-                                "start": 1742677107,
-                                "end": 1742677108,
-                                "period": "1s",
-                                "open": 83923.3,
-                                "close": 83923.2,
-                                "high": 83923.3,
-                                "low": 83923.2,
-                                "volume": "0.035",
-                                "turnover": "2937.3144",
-                                "confirm": false,
-                                "cross_seq": 357864514735,
-                                "timestamp": 1742677107560099
-                            }
-                        ],
-                        "timestamp_e6": 1742677107560099
-                    }
+
         Args:
             interval (str): 1s 
             symbol (str): f.ex BTCUSDT 
         """
-        topic = f"candle.{interval}.{symbol}"
+        topic = f"kline_{interval}.{symbol}"
         self.utils.hidden_topics.append(topic)
     
     async def sub_ticker(self, symbol, topic=""):
