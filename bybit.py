@@ -1,4 +1,5 @@
 from bybit_python.websocket_streams import websocket_streams
+from bybit_python.https_requests import https_requests
 import asyncio
 import time
 
@@ -21,6 +22,7 @@ class bybit:
         self.expires = int((time.time() + 1) * 1000)
         self.URL = "bybit.com/v5"
         self.websocket = websocket_streams(url=self.URL, market=market)
+        self.https = https_requests()
 
         
     
